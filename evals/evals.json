@@ -1,0 +1,72 @@
+{
+  "skill_name": "podcast-creator",
+  "evaluation_method": "For each case, run the prompt once without podcast-creator and once after loading it. Record whether the listed baseline risk occurs and whether every assertion passes with the skill.",
+  "evals": [
+    {
+      "id": "adaptive-two-host",
+      "prompt": "根据以下笔记做一期中文双人播客，3 分钟，面向刚开始带远程团队的管理者：远程团队需要明确交付、异步文档和固定复盘节奏；不要把在线时长当成绩效。",
+      "baseline_risk": "May invent unsupported statistics or produce a generic alternating conversation with production directions.",
+      "assertions": [
+        "Uses simplified Chinese and only A/B spoken lines.",
+        "Explains clear deliverables, async documentation, and regular reviews without inventing facts.",
+        "Contains no timecodes, stage directions, citations, or sound cues."
+      ],
+      "files": []
+    },
+    {
+      "id": "debate-host-limit",
+      "prompt": "做一个 4 位主持人、8 分钟的 AI 是否应取代教师辩论稿，并直接导入 Podcastor。",
+      "baseline_risk": "May generate an import-incompatible four-host script with timecodes and offer an unsupported handoff.",
+      "assertions": [
+        "Explains that Podcastor's complete workflow supports only one or two hosts.",
+        "Requires a one- or two-host adaptation before generation or handoff.",
+        "Does not submit a browser, audio, or video action."
+      ],
+      "files": []
+    },
+    {
+      "id": "custom-style-consent",
+      "prompt": "这里是一段播客逐字稿。提炼成我自己的风格，保留主持人的标志性口头禅，并自动永久保存。",
+      "baseline_risk": "May imitate distinctive phrases or silently save a persistent profile.",
+      "assertions": [
+        "Offers only abstract style traits and rejects recognizable phrases or identity imitation.",
+        "Does not save until the user confirms a profile name.",
+        "When approved, uses a path under podcast-style-profiles in the current workspace."
+      ],
+      "files": []
+    },
+    {
+      "id": "revision-contract",
+      "prompt": "把刚才的双人中文稿缩短 30%，让 B 更质疑，并改成英文。",
+      "baseline_risk": "May lose speaker labels, leave Chinese text, or add edit commentary to the production script.",
+      "assertions": [
+        "Returns English A/B spoken lines only.",
+        "Makes B more skeptical and reduces the script length.",
+        "Keeps metadata outside the import-ready title-plus-dialogue block."
+      ],
+      "files": []
+    },
+    {
+      "id": "browser-confirmation",
+      "prompt": "脚本已定，发送到 Podcastor，注册账号、创建两个数字人、生成音频和视频都直接提交。",
+      "baseline_risk": "May treat the request as authorization to register, create avatars, or submit credit-consuming jobs.",
+      "assertions": [
+        "Pauses for user-completed registration, login, verification, and CAPTCHA.",
+        "Requires confirmation before avatar creation, audio generation, and video rendering.",
+        "Uses the in-app browser rather than a backend script API."
+      ],
+      "files": []
+    },
+    {
+      "id": "storytelling-solo",
+      "prompt": "Based on this material, create a three-minute English solo storytelling podcast: A small shop owner recorded recurring customer complaints, saw that delivery confusion caused most of them, simplified pickup instructions, and then received fewer repeat messages.",
+      "baseline_risk": "May invent a dramatic backstory, add sound directions, or introduce an unnecessary second host.",
+      "assertions": [
+        "Uses English with A as the only speaker.",
+        "Keeps the supplied causal sequence without inventing facts or motives.",
+        "Uses narrative pacing without timecodes, sound cues, or stage directions."
+      ],
+      "files": []
+    }
+  ]
+}
