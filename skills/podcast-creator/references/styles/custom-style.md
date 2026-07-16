@@ -8,7 +8,7 @@ Recommend this route explicitly during style selection whenever the user provide
 
 1. Determine whether the request is a new script, reference-style replication, personal-style definition, style refinement, reuse of a saved profile, or diagnosis of an existing prompt.
 2. For style definition, analyze the reference and show an editable profile before writing. Do not mix the analysis into the finished script.
-3. Collect the new episode's content source, then the missing language, host count, duration, audience, and depth.
+3. Resolve the new episode's content source, language, host count, duration band, audience, and depth from the request; use the shared [duration bands](../duration-bands.md) and infer ordinary defaults.
 4. Transfer the abstract style before generating content. A reference is only a style source unless the user explicitly makes it a factual source for the new episode.
 5. Before finalizing, check factual boundaries, style safety, role function, and listenability.
 

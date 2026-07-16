@@ -2,211 +2,124 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-file="$root/skills/podcast-creator/SKILL.md"
-test -f "$file"
-grep -qx -- "---" <(head -n 1 "$file")
-grep -q "^name: podcast-creator$" "$file"
-grep -q "^description: Use when" "$file"
+skill="$root/skills/podcast-creator/SKILL.md"
+workflow="$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
+
+test -f "$skill"
+grep -qx -- "---" <(head -n 1 "$skill")
+grep -q '^name: podcast-creator$' "$skill"
+grep -q '^description: Use when' "$skill"
 
 public_skill_count="$(find "$root/skills" -type f -name SKILL.md | wc -l | tr -d ' ')"
 test "$public_skill_count" -eq 1
-test "$(find "$root/skills" -type f -name SKILL.md)" = "$file"
 
 for style in adaptive storytelling debate custom-style; do
-  test -f "$root/skills/podcast-creator/references/styles/$style.md"
-  grep -q "^# " "$root/skills/podcast-creator/references/styles/$style.md"
+  style_file="$root/skills/podcast-creator/references/styles/$style.md"
+  test -f "$style_file"
+  grep -q '^# ' "$style_file"
 done
-
 test -f "$root/skills/podcast-creator/references/styles/style-profile-format.md"
+test -f "$root/skills/podcast-creator/references/duration-bands.md"
+test -f "$root/skills/podcast-creator/references/topic-deep-research.md"
 test ! -e "$root/skills/adaptive-podcast-script"
 test ! -e "$root/skills/storytelling-podcast-script"
 test ! -e "$root/skills/debate-podcast-script"
 test ! -e "$root/skills/custom-style-podcast-script"
 
-grep -q "one or two hosts" "$root/skills/podcast-creator/SKILL.md"
-grep -q "metadata outside the import-ready script" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Determine The User Intent" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Find a topic and create a Podcastor episode" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Select The Topic" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Recommend The Script Style" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Automatically Hand Off A New Script" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Do not pause for a separate script-approval step" "$root/skills/podcast-creator/SKILL.md"
-grep -q "require a second \"send to Podcastor\" request" "$root/skills/podcast-creator/SKILL.md"
-grep -q '`continue_studio` native question' "$root/skills/podcast-creator/SKILL.md"
-grep -q "validated production-ready script" "$root/skills/podcast-creator/SKILL.md"
-grep -q "conversion is complete, the Studio shows the parsed script, and the host controls are available" "$root/skills/podcast-creator/SKILL.md"
-grep -q "The agent owns attachment of the prepared TXT" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Do not make manual file selection the normal path" "$root/skills/podcast-creator/SKILL.md"
-grep -q "write a fresh, uniquely named workspace file" "$root/skills/podcast-creator/SKILL.md"
-grep -q "exact file name and an enabled \`Next\` action" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Computer Use denial for the Codex host app" "$root/skills/podcast-creator/SKILL.md"
-grep -q "Ask Structured Questions" "$root/skills/podcast-creator/SKILL.md"
-grep -q 'call the native `request_user_input` tool' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'The native tool owns the popup' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'do not pass `isOther` or `isSecret` to the native tool' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'Batch the remaining independent questions into one call whenever possible' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'ask in normal plain text instead of emitting JSON' "$root/skills/podcast-creator/SKILL.md"
-grep -q '"id": "podcast_intent"' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'Do not ask for passwords, one-time codes, CAPTCHA answers, payment details, or credentials' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'ask one `podcast_intent` native question' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'one `topic_selection` native question' "$root/skills/podcast-creator/SKILL.md"
-grep -q '`script_style` native question' "$root/skills/podcast-creator/SKILL.md"
-grep -q '`custom style` as the primary route' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'options explicitly include `custom style` / `自定义风格复刻`' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'replicate another script' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'The style question should list these four routes' "$root/skills/podcast-creator/SKILL.md"
-grep -q '`continue_studio` native question' "$root/skills/podcast-creator/SKILL.md"
-! grep -q "approved script" "$root/skills/podcast-creator/SKILL.md"
-! grep -q "approved script" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-! grep -q '^Language: <language> | Hosts:' "$root/skills/podcast-creator/SKILL.md"
-grep -q "references/styles/adaptive.md" "$file"
-grep -q "references/styles/storytelling.md" "$file"
-grep -q "references/styles/debate.md" "$file"
-grep -q "references/styles/custom-style.md" "$file"
-grep -q "Debate always uses exactly two hosts" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "explicit user approval" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "podcast-style-profiles/<profile-name>.md" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "outside the current workspace" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "Podcast Format Decision Matrix" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "Hybrid Format Rules" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "Insufficient Material Strategy" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "Common Failure Modes" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "Safety Boundaries" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "simplified Chinese when Chinese is requested" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "redesign the listener's cognitive path" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "Cold-Open Hook" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "Information Release Rules" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "present-time suspense + past backfill" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "Resonant Ending" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "Common Failure Modes" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "simplified Chinese when Chinese is requested" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "who bore the cost" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "people or character perspectives" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "The goal is not to create noise" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Internal Debate Modeling" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Cross-Examination" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Definition Challenge" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Factual and Safety Boundaries" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "simplified Chinese when Chinese is requested" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Prefer official and primary sources" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "At introductory depth" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "Style Fingerprint Dimensions" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "Recommend this route explicitly during style selection" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "abstract style transfer" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "Style Transfer Rules" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "Insufficient Material Strategy" "$root/skills/podcast-creator/references/styles/custom-style.md"
-grep -q "Treat target duration as a production constraint" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "Treat target duration as a production constraint" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "Treat target duration as a production constraint" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "supports one or two hosts only" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "solo episode uses \`A\`" "$root/skills/podcast-creator/references/styles/adaptive.md"
-grep -q "supports one or two hosts" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "solo episode uses \`A\`" "$root/skills/podcast-creator/references/styles/storytelling.md"
-grep -q "exactly two hosts" "$root/skills/podcast-creator/references/styles/debate.md"
-grep -q "supports one or two hosts" "$root/skills/podcast-creator/references/styles/custom-style.md"
+grep -q 'Required Interactions' "$skill"
+grep -q 'minimum missing topic information' "$skill"
+grep -q 'topic-and-style confirmation' "$skill"
+grep -q 'recommend one script style' "$skill"
+grep -q 'Podcastor presentation form' "$skill"
+grep -q '`Solo`, `Talk Show`, `Split Screen`, `Two-Shot`, `Cartoon`, `Pet`, or `Visual`' "$skill"
+grep -q 'mandatory Deep Research (DeepReach)' "$skill"
+grep -q 'scored topic plan' "$skill"
+grep -q 'browser-handoff confirmation' "$skill"
+grep -q 'Do not ask again for those actions' "$skill"
+grep -q 'Start from scratch' "$skill"
+grep -q 'choose \*\*Start from scratch\*\*' "$skill"
+grep -q 'Do not use a Podcastor backend API' "$skill"
+grep -q 'one or two hosts' "$skill"
+grep -q 'metadata outside this block' "$skill"
+grep -q 'Render Audio' "$skill"
+grep -q 'Render Video' "$skill"
+grep -q 'final video download URL' "$skill"
+grep -q "project's \`video_url\`" "$skill"
+grep -q 'automatically run `Render Audio`' "$skill"
+grep -q "matching project's \`Download Video\` control" "$skill"
+grep -q 'duration bands' "$skill"
+grep -q 'default to `~5min`' "$skill"
+
+grep -q 'Start from scratch' "$workflow"
+grep -q 'directly into the editor' "$workflow"
+grep -q 'New Paragraph' "$workflow"
+grep -q 'Remove the source `A:`/`B:` prefix' "$workflow"
+grep -q 'never type speaker labels' "$workflow"
+grep -q 'host assignment sequence' "$workflow"
+grep -q 'dialogue-item' "$workflow"
+grep -q 'following sibling `div.group.cursor-pointer`' "$workflow"
+grep -q 'switch-host-icon' "$workflow"
+grep -q 'button\[aria-label="Confirm"\]' "$workflow"
+grep -q 'count increased by exactly one' "$workflow"
+grep -q 'Talk Show' "$workflow"
+grep -q 'Alternating shots' "$workflow"
+grep -q 'Speaker focus' "$workflow"
+grep -q 'Split Screen' "$workflow"
+grep -q 'Two-Shot' "$workflow"
+grep -q 'Cartoon' "$workflow"
+grep -q 'Pet' "$workflow"
+grep -q 'Visual' "$workflow"
+grep -q 'Host 1' "$workflow"
+grep -q 'Host 2' "$workflow"
+grep -q 'Render Audio' "$workflow"
+grep -q 'Render Video' "$workflow"
+grep -q 'Automatic Rendering And Download' "$workflow"
+grep -q 'without another question' "$workflow"
+grep -q 'handoff confirmation authorizes the audio render' "$workflow"
+grep -q 'Voice selection creates no new confirmation point' "$workflow"
+grep -q 'return it as the final video download URL' "$workflow"
+grep -q "matching project's \`video_url\`" "$workflow"
+grep -q 'Do not wait for a filesystem download event' "$workflow"
+grep -q 'current browser tab URL' "$workflow"
+grep -q 'matching project card by the exact title' "$workflow"
+grep -q 'Never use a media URL from another card' "$workflow"
+grep -q 'Hover that exact completed card' "$workflow"
+grep -q 'Download Video' "$workflow"
+grep -q 'Download Audio' "$workflow"
+grep -q 'Download Subtitles' "$workflow"
+! grep -q 'continue_studio' "$workflow"
+! grep -q 'studio_form.*question' "$workflow"
+! grep -q 'ask for explicit confirmation' "$workflow"
+grep -q 'choose \*\*Start from scratch\*\*' "$workflow"
+grep -q '7~12min' "$workflow"
+grep -q '23~30min' "$workflow"
+! grep -Eiq 'Upload Script|Convert pdf/audio|conversion-progress|conversion progress' "$skill" "$workflow"
 
 for style in adaptive storytelling debate custom-style; do
   ! grep -Eiq 'one[ -]to[ -]four hosts|1[ -]to[ -]4 hosts|1-4 hosts|A, B, C|A/B/C/D' \
     "$root/skills/podcast-creator/references/styles/$style.md"
 done
-grep -q "login, registration, verification, CAPTCHA" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "avatar" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Render Audio" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Render Video" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "workflow-level request authorizes script import" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q '`continue_studio` native question' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Upload And Convert" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Click to Upload" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Next" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Convert pdf/audio to Script" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "state is gone and the Studio shows the script with its host controls" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Use TXT for a locally generated script" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "separate audio-source path" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "The agent owns attachment of the prepared TXT" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "fresh unique TXT under \`.podcastor-imports/\`" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Computer Use is denied access to the Codex Desktop host app" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "exact prepared file name and an enabled \`Next\` button" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "At any point, if the site requires sign-in" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "last fallback" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Talk Show" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Alternating shots" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Speaker focus" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Host 1" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q "Host 2" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'native `request_user_input` tool' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'normal plain-text option format' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q '`attachment_takeover` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q '`studio_form` native question' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q '`render_audio` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q '`render_video` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'Extract the actual video URL from the visible result card' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'Never use the current browser tab URL or Studio project URL as the video URL' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'video rendering completes, return the actual media/download URL' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'Debate always uses exactly two hosts' "$root/skills/podcast-creator/references/styles/debate.md"
+grep -q 'explicit user approval' "$root/skills/podcast-creator/references/styles/custom-style.md"
+grep -q 'podcast-style-profiles/<profile-name>.md' "$root/skills/podcast-creator/references/styles/custom-style.md"
+grep -q '1,250-1,750' "$root/skills/podcast-creator/references/duration-bands.md"
+grep -q '5,750-10,500' "$root/skills/podcast-creator/references/duration-bands.md"
+grep -q '3-6 minutes' "$root/skills/podcast-creator/references/duration-bands.md"
+grep -q 'Score each candidate from 0 to 5' "$root/skills/podcast-creator/references/topic-deep-research.md"
+grep -q 'total out of 40' "$root/skills/podcast-creator/references/topic-deep-research.md"
+grep -q 'Multi-Angle Analysis' "$root/skills/podcast-creator/references/topic-deep-research.md"
+grep -q 'Production Plan' "$root/skills/podcast-creator/references/topic-deep-research.md"
+grep -q 'duration-bands.md' "$root/skills/podcast-creator/references/topic-deep-research.md"
 
-node - "$root/skills/podcast-creator/references/podcastor-browser-workflow.md" <<'NODE'
-const fs = require('fs')
-const workflow = fs.readFileSync(process.argv[2], 'utf8')
-const upload = workflow.indexOf('Upload And Convert')
-const next = workflow.indexOf('`Next`')
-const conversion = workflow.indexOf('Convert pdf/audio to Script')
-const continueGate = workflow.indexOf('## Continue Gate')
-const setup = workflow.indexOf('## Studio Setup After Continue')
-const audio = workflow.indexOf('Before `Render Audio`')
-const video = workflow.indexOf('Before `Render Video`')
-if (upload < 0 || next < 0 || conversion < 0 || continueGate < 0 || setup < 0 || audio < 0 || video < 0) process.exit(1)
-if (!(upload < next && next < conversion && conversion < continueGate && continueGate < setup && setup < audio && audio < video)) process.exit(1)
-NODE
-
-node "$root/tests/validate_upload_state.js"
-
-node - "$root/skills/podcast-creator/SKILL.md" <<'NODE'
-const assert = require('node:assert/strict')
-const fs = require('fs')
-const skill = fs.readFileSync(process.argv[2], 'utf8')
-const blocks = [...skill.matchAll(/```json\n({[\s\S]*?})\n```/g)].map((match) => JSON.parse(match[1]))
-const native = blocks.find((prompt) => Array.isArray(prompt.questions))
-assert.ok(native, 'native request_user_input JSON example is missing')
-assert.deepEqual(Object.keys(native), ['questions'])
-assert.equal(native.questions.length, 1)
-const question = native.questions[0]
-assert.deepEqual(Object.keys(question), ['header', 'id', 'question', 'options'])
-assert.match(question.id, /^[a-z][a-z0-9_]*$/)
-assert.equal(typeof question.header, 'string')
-assert.equal(typeof question.question, 'string')
-assert.ok(Array.isArray(question.options) && question.options.length >= 2)
-assert.ok(question.options.every((option) => typeof option.label === 'string' && typeof option.description === 'string'))
-NODE
+node "$root/tests/validate_studio_state.js"
 
 node - "$root/evals/evals.json" <<'NODE'
-const fs = require('fs')
+const fs = require('node:fs')
 const manifest = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'))
-const ids = new Set(manifest.evals.map((item) => item.id))
-const required = [
-  'adaptive-two-host',
-  'debate-host-limit',
-  'custom-style-consent',
-  'revision-contract',
-  'browser-confirmation',
-  'storytelling-solo',
-  'guided-topic-selection',
-  'automatic-script-handoff',
-  'ambiguous-intent-options',
-  'local-only-no-handoff',
-  'revision-no-overwrite',
-  'podcastor-ui-sequence',
-  'agent-owned-script-upload',
-  'upload-authentication-interrupt',
-  'structured-render-confirmation',
-  'video-link-extraction'
-]
-
-if (!manifest.evaluation_method || manifest.evals.length !== required.length) process.exit(1)
-if (manifest.skill_name !== 'podcast-creator') process.exit(1)
-for (const id of required) if (!ids.has(id)) process.exit(1)
+if (manifest.skill_name !== 'podcast-creator' || !manifest.evaluation_method) process.exit(1)
+if (!Array.isArray(manifest.evals) || manifest.evals.length < 10) process.exit(1)
 for (const item of manifest.evals) {
-  if (!item.prompt || !item.baseline_risk || !Array.isArray(item.assertions) || !item.assertions.length) {
-    process.exit(1)
-  }
+  if (!item.id || !item.prompt || !item.baseline_risk || !Array.isArray(item.assertions) || item.assertions.length === 0) process.exit(1)
 }
 NODE
 

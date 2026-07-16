@@ -61,7 +61,7 @@ Do not fabricate facts, data, evidence, quotations, research, company informatio
 
 ## Duration, Language, and Self-Check
 
-Character-based languages run about 250-350 characters per minute; alphabetic languages about 120-160 words per minute. A short episode keeps the core question, one round, and closure. A medium episode adds two rounds and cross-examination. A long episode adds factual disagreement, value conflict, counterexamples, and fuller boundaries.
+Character-based languages run about 250-350 characters per minute; alphabetic languages about 120-160 words per minute. For Podcastor, map the target to the supported bands in `../duration-bands.md`; a 3-6 minute request maps to `~5min`. A short episode keeps the core question, one round, and closure. A medium episode adds two rounds and cross-examination. A long episode adds factual disagreement, value conflict, counterexamples, and fuller boundaries.
 
 Treat target duration as a production constraint. Estimate the script length in the requested language before finalizing. Extend through new layers of attack and response, counterexamples, boundary conditions, perspectives, or synthesis; do not repeat arguments to fill time.
 

@@ -64,6 +64,7 @@ The current Podcastor workflow supports one or two hosts only. A solo episode us
 - Chinese, Japanese, Korean, and other character-based languages: about 250-350 characters per minute.
 - English and other alphabetic languages: about 120-160 words per minute.
 - Estimate other languages using their usual Podcast speaking pace.
+- For Podcastor, map the target to the supported bands in `../duration-bands.md`; a 3-6 minute request maps to `~5min`.
 - A short episode focuses on one central claim. A medium episode includes a main line, context, analysis, and one extension. A long episode adds valuable layers, examples, counterviews, scenes, or synthesis rather than repetition.
 
 Treat target duration as a production constraint, not a loose suggestion. Estimate the script length in the requested language before finalizing. When extending, add a useful layer, example, counterview, scene, or synthesis; never repeat the same point to fill time.

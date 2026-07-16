@@ -1,38 +1,59 @@
 # Podcastor Browser Workflow
 
-Use this workflow after a new one- or two-host script is generated and validated in the guided end-to-end creation flow. The workflow-level request authorizes script import for its first production-ready script; it does not authorize account actions or credit-consuming production actions. Do not use it for a local-only request or a draft still under revision.
+Use this workflow only after the user has confirmed browser handoff for a new one- or two-host script. The current Podcastor path is Studio's **Start from scratch** editor. A locally generated script is entered directly into the editor as host-assigned paragraphs.
 
-Use the native `request_user_input` tool described in `SKILL.md` for every user-facing choice or confirmation in this workflow. Clarify only blockers first, then batch up to three independent choices into one call and infer safe defaults for anything already clear. Keep the continue gate, authentication, avatar creation, audio render, and video render as separate confirmations. If the native tool fails, use the normal plain-text option format from `SKILL.md`.
+Routine choices are agent-owned. Infer and apply the form, camera treatment, existing podcast hosts, and voices from the script and the recommendation matrix in `SKILL.md`. The handoff confirmation authorizes the audio render, video render, and completed-video download for this exact script. Pause only at login/registration/verification/CAPTCHA. Select existing hosts; do not create avatars. Never inspect or extract tokens, cookies, local storage, or credentials.
 
-## Prepare The Exact File
+Use [duration bands](duration-bands.md) for the time control. Select `~5min`, `7~12min`, `13~17min`, `18~22min`, or `23~30min` when the visible control offers it. For a requested 3-6 minute Podcastor episode, select `~5min`; report the mapped band and estimated spoken character/word count before entering the script.
 
-1. Verify that the generated script has a title and only `A:` or `B:` spoken lines. Write the exact current title and dialogue, with one speaker turn per paragraph, to a fresh unique TXT under `.podcastor-imports/` in the current workspace. Read it back and compare it with the validated import-ready script before attaching it. Do not reuse a same-named file from an earlier episode.
+## Prepare The Script Artifact
 
-## Upload And Convert
+1. Validate the current import-ready block: a title followed by spoken `A:`/`B:` lines, with no metadata or directions inside the dialogue. Write a fresh uniquely named TXT under `.podcastor-imports/` and read it back for an exact comparison. This is an audit/export artifact, not a file to attach through Podcastor.
 
-2. Open `https://podcastor.ai/video-podcast` with the in-app browser and inspect the current page rather than assuming labels or controls. Select `Upload Script`, then the `Click to Upload` drop area. The current UI accepts script files in PDF, DOCX, or TXT format up to 50 MB. Use TXT for a locally generated script; do not convert the script into audio merely to upload it.
-3. At any point, if the site requires sign-in, stop. Treat login, registration, verification, CAPTCHA, or credential entry as the same boundary. The user must complete those steps themselves and tell the agent when they are done. Do not ask for or collect those values in a structured question, and do not use the attachment path to bypass an authentication boundary.
-4. The agent owns attachment of the prepared TXT. First use a supported browser file-input or attachment capability. If it is unavailable, check whether Computer Use can operate the host application's native file picker before attempting it. If Computer Use is denied access to the Codex Desktop host app, treat that as a native-picker capability failure and do not retry it. The workflow request authorizes the upload; do not ask the user to locate or select the file as the normal path.
-5. If both direct attachment and native-picker operation are unavailable because of a concrete platform restriction, report the unavailable capabilities, keep the upload page and verified TXT available, and use an `attachment_takeover` native confirmation with no free-form option as the last fallback to let the user confirm that they selected the prepared file or cancel the upload. Do not claim that the file was selected, attached, or that import started.
-6. Treat the file as selected or attached only when the page visibly shows the exact prepared file name and an enabled `Next` button. Before this state, do not say that the file is selected or attached.
-7. Click `Next` only after the selected-state check passes. This starts the import and creates or opens the Studio project, but it does not authorize voice, avatar, audio, or video production.
-8. Wait for the conversion state in Studio. The current UI reports `Convert pdf/audio to Script...` with a percentage and staged progress such as processing material content, extracting script text, assigning roles, and finalizing episode content. Do not treat the import as complete until that state is gone and the Studio shows the script with its host controls. If conversion fails, report the visible failure and keep the verified local script available for correction.
+## Start From Scratch
 
-The UI can also convert MP3, WAV, or M4A audio to a script. That is a separate audio-source path, not the route for a locally generated TXT script.
+2. Open `https://podcastor.ai/studio/podcast-studio` in the in-app browser. If the page is on another Podcastor surface, use the visible **Studio** navigation item. Preserve existing projects; start a new project rather than replacing a prior episode.
+3. In the start panel, choose **Start from scratch**.
+4. Set the project title to the generated title when the title field is available. In the Script panel, parse the ordered local dialogue into individual `A:`/`B:` turns. The editor usually opens with one initial paragraph; use it for the first turn and create every later turn with the scoped **New Paragraph** control.
 
-## Continue Gate
+### Deterministic paragraph-entry loop
 
-9. Once conversion succeeds, use a `continue_studio` native question with options to continue setup or stop at the imported script. Stop here until the user explicitly agrees. Do not select a form, visual treatment, host, voice, audio render, or video render before the user continues.
+Run this loop for `i = 1..N` in source order. `N` must equal the number of dialogue lines.
 
-## Studio Setup After Continue
+1. For `i > 1`, finish the previous draft first: click the current paragraph's `button[aria-label="Confirm"]` and wait until the button is disabled or the text is visibly committed. Hover the interval immediately after the latest `.dialogue-item`; it is the following sibling `div.group.cursor-pointer` and reveals **New Paragraph**. Click that interval's control. Do not use a global `New Paragraph` locator because the page keeps hidden template copies. Confirm that the `.dialogue-item` count increased by exactly one.
+2. Scope all operations to the new/latest `.dialogue-item`. Read its visible `Host 1`/`Host 2` label. If it differs from the expected host (`A` → Host 1, `B` → Host 2), click that item's `img.switch-host-icon` (**Switch role**) once and re-read the label. Never assume the editor inherited the previous host.
+3. Activate that item's `div.editor-content[contenteditable="true"]` (the visible `tiptap.ProseMirror` textbox), replace its contents with the spoken text only, and ensure it contains one paragraph. Remove the source `A:`/`B:` prefix before typing; never type speaker labels, Markdown, or stage directions.
+4. Click the same item's `button[aria-label="Confirm"]`. Wait for the edit state to close or become disabled, and verify the committed text before starting the next iteration.
 
-10. For a solo script, use `Solo` and map `A` to Host 1. For a two-host script, use a `studio_form` native question after inspecting the available options. The current Studio navigation includes `Talk Show`, `Split Screen`, `Two-Shot`, `Cartoon`, `Pet`, and `Visual`; do not assume a form has been selected solely from a previous project state.
-11. In the Video Preview area, use `host_presentation` and `camera_treatment` native questions for the visible existing host presentations and camera treatments such as `Alternating shots` or `Speaker focus`. The preview also exposes existing host cards and `Create New Podcast Host`. Selecting an existing host is reversible; use a `create_avatar` native confirmation only after showing the available method and visible cost.
-12. Map `A` to `Host 1` and `B` to `Host 2` in the voice bar. Use a `voice_selection` native question for the visible voices or voice pairs, then confirm that the selected host count and voice assignments still match the script before any rendering action.
+For the first turn, skip step 1 if the initial paragraph already exists; otherwise create it with **New Paragraph**. For a solo script, perform the same loop with every paragraph on Host 1. If a click or text replacement would target a hidden element, stop and make the adjacent interval or paragraph visible by hovering it; do not force a hidden template or paste the entire script as a fallback.
 
-## Render Boundaries
+5. Verify that the paragraph count equals `N`, the visible host assignment sequence matches the original `A`/`B` sequence, every paragraph contains spoken text without a speaker prefix, and the project shows a saved or otherwise accepted state. If a paragraph or host assignment is missing, correct it before configuration.
 
-13. Before `Render Audio` in the bottom action bar, show the selected voices and visible credit estimate. Use a `render_audio` native confirmation before clicking it. Wait for the page to report success or failure.
-14. Before `Render Video` in the Studio header, show the selected form, camera treatment, hosts, aspect ratio, and visible credit estimate. Use a `render_video` native confirmation before clicking it. After a confirmed production action, wait for the completed result state. Extract the actual video URL from the visible result card, download/open link, video or source element, or an explicit copy-media-link control. Return that media URL when available. Never use the current browser tab URL or Studio project URL as the video URL; those URLs identify the project page only. If rendering completes but no media URL is exposed, report completion with the project URL separately and state that the video link was not surfaced. Otherwise report the surfaced error and keep the current script available for correction.
+## Apply Automatic Recommendations
 
-Never bypass authentication, CAPTCHA, payment, usage limits, or warning dialogs. Do not use a product API as a substitute for this browser flow.
+Use the primary presentation recommendation accepted in the topic-and-style proposal. The labels below are current UI examples and may change; inspect the page before clicking. `Script style` controls the writing; `form` controls the on-screen presentation. Do not confuse them or ask a second form-selection question.
+
+| Script signal | Form | Camera treatment | Host and voice treatment |
+| --- | --- | --- |
+| Solo explanation or story | `Solo` | `Speaker focus` | One warm, clear existing host; conversational voice |
+| Two-host adaptive analysis | `Talk Show` | `Alternating shots` | Host 1 calm/analytical; Host 2 curious/critical |
+| Two-host storytelling | `Talk Show` | `Speaker focus` or `Alternating shots` when both hosts carry equal narrative weight | Host 1 warm narrator; Host 2 vivid but restrained companion |
+| Two-host debate | `Talk Show` | `Alternating shots` | Host 1 authoritative case-maker; Host 2 skeptical challenger |
+| Two-host remote interview or deliberate side-by-side contrast | `Split Screen` | `Speaker focus` | Distinct but balanced existing hosts; clear contrasting roles |
+| Intimate two-host conversation or shared reaction | `Two-Shot` | `Speaker focus` | Hosts with compatible, conversational presence |
+| Light, family-friendly animal or companion-led episode | `Pet` | Match the selected pet scene | Warm, playful existing voices; use only when the topic supports it |
+| Playful, youth-oriented, imaginative, or simplified explainer | `Cartoon` | Match the selected animated scene | Expressive but clear existing voices |
+| Data-led explainer, visual narrative, or slide-like walkthrough | `Visual` | Match the selected visual treatment | Clear explanatory voices; prioritize legibility over character performance |
+| Custom style | Match the profile's structure; default to `Talk Show` | Match the profile's pacing; default to `Alternating shots` | Match abstract role and tone traits only |
+
+6. In the left Studio rail, select the recommended form (`Talk Show`, `Solo`, `Split Screen`, `Two-Shot`, `Cartoon`, `Pet`, or `Visual`) when it exists. In the preview, select the recommended treatment such as **Alternating shots** or **Speaker focus**.
+7. Choose existing podcast hosts that fit the recommended roles. The preview may show **Create New Podcast Host** and existing host cards. Select the closest visible existing host and never create a new one in this automatic path.
+8. In the voice bars, map Host 1 to `A` and Host 2 to `B`. Select the closest visible voices to the recommended traits, then verify that the number of assignments matches the script. Voice selection creates no new confirmation point; continue to automatic rendering under the browser-handoff confirmation.
+
+## Automatic Rendering And Download
+
+9. Report the visible Host 1/Host 2 voices and credit estimate, then click **Render Audio** without another question. Wait for a completed player/download control or a surfaced failure. Do not treat a loading state as success.
+10. Report the visible form, camera treatment, host assignments, voices, aspect ratio, and credit estimate, then click **Render Video** without another question. Wait for a completed result or a surfaced failure. The current UI can return to the home/project list while rendering; locate the matching project card by the exact title rather than relying on the current browser URL.
+11. Treat a matching card as complete only when its progress overlay is gone and it exposes a completed duration or a visible player/download/share result. Hover that exact completed card to reveal its action bar. The current UI shows a download icon, a share icon, and an overflow (`...`) icon. Click the download icon when it directly starts a file download. If the action bar opens an overflow menu, select **Download Video**; do not select **Download Audio** or **Download Subtitles**. That action opens the matching project's `video_url` with a download-disposition filename derived from the project title. Capture the exact opened URL and return it as the final video download URL. If the browser exposes only the underlying source, return that matching project's `video_url`; it is the media URL used by the export action. Do not wait for a filesystem download event or report a downloaded artifact instead of the URL. If a popup resets the browser binding, reconnect to the same session, locate the completed card by its exact title, and extract the same project's `video_url` or download URL. Never use a media URL from another card, a cover-image URL, or the current browser tab URL. If the completed card exposes no `video_url`, source element, download URL, or copy-media-link control, report that no video link was surfaced.
+
+Never bypass authentication, CAPTCHA, payment, usage limits, or warning dialogs. Do not use a Podcastor API as a substitute for this browser flow.

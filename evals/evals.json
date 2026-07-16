@@ -4,12 +4,13 @@
   "evals": [
     {
       "id": "adaptive-two-host",
-      "prompt": "根据以下笔记做一期中文双人播客，3 分钟，面向刚开始带远程团队的管理者：远程团队需要明确交付、异步文档和固定复盘节奏；不要把在线时长当成绩效。",
+      "prompt": "根据以下笔记做一期中文双人 Podcastor 播客，约 5 分钟，面向刚开始带远程团队的管理者：远程团队需要明确交付、异步文档和固定复盘节奏；不要把在线时长当成绩效。",
       "baseline_risk": "May invent unsupported statistics or produce a generic alternating conversation with production directions.",
       "assertions": [
-        "Uses simplified Chinese and only A/B spoken lines.",
-        "Explains clear deliverables, async documentation, and regular reviews without inventing facts.",
-        "Contains no timecodes, stage directions, citations, or sound cues."
+        "Runs Deep Research before the proposal and separates evidence from unsupported assumptions.",
+        "Proposes the remote-team topic with a scored plan that includes duration, script style, presentation form, title, and content pillars.",
+        "Requires a topic-and-style confirmation or adjustment before returning the final script.",
+        "After confirmation, uses simplified Chinese and only A/B spoken lines without unsupported facts, timecodes, stage directions, citations, or sound cues."
       ],
       "files": []
     },
@@ -53,14 +54,15 @@
       "baseline_risk": "May treat the request as authorization to register, create avatars, or submit credit-consuming jobs.",
       "assertions": [
         "Pauses for user-completed registration, login, verification, and CAPTCHA.",
-        "Requires confirmation before avatar creation, audio generation, and video rendering.",
+        "Uses existing hosts and does not create avatars in the automatic path.",
+        "After the one browser-handoff confirmation, renders audio and video and downloads the video without further questions.",
         "Uses the in-app browser rather than a backend script API."
       ],
       "files": []
     },
     {
       "id": "storytelling-solo",
-      "prompt": "Based on this material, create a three-minute English solo storytelling podcast: A small shop owner recorded recurring customer complaints, saw that delivery confusion caused most of them, simplified pickup instructions, and then received fewer repeat messages.",
+      "prompt": "Based on this material, create an English solo storytelling Podcastor episode in the ~5min band: A small shop owner recorded recurring customer complaints, saw that delivery confusion caused most of them, simplified pickup instructions, and then received fewer repeat messages.",
       "baseline_risk": "May invent a dramatic backstory, add sound directions, or introduce an unnecessary second host.",
       "assertions": [
         "Uses English with A as the only speaker.",
@@ -70,42 +72,67 @@
       "files": []
     },
     {
+      "id": "presentation-style-recommendation",
+      "prompt": "我有一段给儿童家庭讲猫狗领养常识的轻松素材。先帮我确定选题和推荐风格，不要写脚本。",
+      "baseline_risk": "May recommend only a writing style, omit Podcastor presentation choices, or jump directly into a script.",
+      "assertions": [
+        "Proposes a topic/title and a script style with concise reasons.",
+        "Recommends Pet as the primary Podcastor presentation and Cartoon as an optional alternative, with reasons tied to the audience and material.",
+        "Requires the user to confirm or adjust the combined topic, script-style, and presentation proposal before drafting."
+      ],
+      "files": []
+    },
+    {
       "id": "guided-topic-selection",
       "prompt": "我想做一期面向产品经理的 AI 播客，但还没有题目。请带我确定一个值得做的选题。",
-      "baseline_risk": "May ask a broad, unhelpful question or jump straight to a script without giving the user a way to select a topic.",
+      "baseline_risk": "May ask a broad, unhelpful question or jump straight to an unsupported topic.",
       "assertions": [
-        "Identifies the request as topic discovery and gives compact intent or topic-selection guidance.",
-        "Offers three to five numbered candidates with a title, angle, and audience rationale.",
-        "Waits for topic confirmation before recommending a script style or generating a script."
+        "Recognizes that the user wants topic discovery and offers two or three timely, clearly labeled candidates when accessible research is available.",
+        "Runs Deep Research for every candidate and scores each one using evidence, audience, freshness, tension, duration, and production fit.",
+        "Gives each candidate a recommended title, script style, duration band, presentation form, and concise rationale.",
+        "Requires the user to choose and confirm a topic-and-style proposal before drafting."
       ],
       "files": []
     },
     {
       "id": "automatic-script-handoff",
       "prompt": "已确认的选题是：AI Agent 的价格正在下降，但数据中心需求正在挤压电网。请推荐主风格；我接受你的推荐。按完整制作流程生成一份双人英文五分钟播客。",
-      "baseline_risk": "May omit style guidance, wait for a second send request, or proceed into voice and video production without consent.",
+      "baseline_risk": "May omit style guidance, wait for a second send request, or fail to use the current Studio scratch workflow.",
       "assertions": [
-        "Recommends a primary style, then generates a two-host English production-ready script locally without asking for another topic or script-approval confirmation.",
-        "Automatically opens Podcastor and begins importing the exact validated script without requiring a second send request; a native file-picker fallback remains visible only when browser control cannot choose the prepared file.",
-        "After import, asks whether to continue and does not create avatars, render audio, or render video without a separate confirmation."
+        "Runs Deep Research on the user-selected AI Agent and data-center topic before treating it as ready for production.",
+        "Presents a scored plan with title, content pillars, duration band, script style, and presentation form before the user's acceptance is treated as topic-and-style confirmation.",
+        "Obtains one explicit browser-handoff confirmation before opening Podcastor Studio.",
+        "After confirmation, chooses Start from scratch, strips A:/B: labels, creates one New Paragraph per dialogue turn, switches each paragraph to the matching host, applies existing-host and voice recommendations, renders audio and video, and downloads the video without more questions."
+      ],
+      "files": []
+    },
+    {
+      "id": "user-topic-deep-research",
+      "prompt": "我想做一期关于 AI 数据中心用电压力的播客。先帮我做选题研究和制作规划，不要写脚本。",
+      "baseline_risk": "May accept the user topic without research, score it from intuition, or recommend a presentation form without connecting it to the duration and evidence.",
+      "assertions": [
+        "Runs Deep Research on the user-supplied topic and distinguishes verified facts, competing interpretations, and evidence gaps.",
+        "Scores the topic out of 40 using the documented dimensions and explains the recommendation or constraints.",
+        "Returns a coherent plan with title, editorial question, content pillars, script style, host roles, Podcastor duration band, presentation form, and camera treatment.",
+        "Requires the user to confirm or adjust the plan before drafting."
       ],
       "files": []
     },
     {
       "id": "ambiguous-intent-options",
       "prompt": "帮我做一期播客。",
-      "baseline_risk": "May assume a topic or start drafting without learning whether the user wants ideation, a script, a revision, a personal style, or project continuation, or may use an unstructured question that cannot drive the client UI.",
+      "baseline_risk": "May ask unnecessary menus or start drafting without a usable topic or source.",
       "assertions": [
-        "Uses the native request_user_input tool when available, or otherwise returns one normal plain-text question with the five intent choices.",
-        "Uses podcast_intent as the native question id when the tool is available and does not ask source, style, or production questions before intent is clarified.",
-        "Does not generate a script or open Podcastor until the user chooses or clarifies an intent."
+        "Asks only for the minimum missing topic or source information, then presents a topic-and-style proposal.",
+        "If no usable topic or current source can be obtained, reports the concrete prerequisite instead of inventing facts.",
+        "Does not request style, host, language, duration, or continuation choices as separate questions."
       ],
       "files": []
     },
     {
       "id": "local-only-no-handoff",
       "prompt": "基于这段笔记生成一份本地使用的中文双人播客稿：团队复盘应聚焦决策质量，而不是只看结果。不要打开 Podcastor。",
-      "baseline_risk": "May treat every new script as an end-to-end production request and open or upload to Podcastor despite the local-only instruction.",
+      "baseline_risk": "May treat every new script as an end-to-end production request and open Studio despite the local-only instruction.",
       "assertions": [
         "Generates the requested local script without opening or importing into Podcastor.",
         "Keeps the one- or two-host and spoken-only production contract."
@@ -115,7 +142,7 @@
     {
       "id": "revision-no-overwrite",
       "prompt": "把已经上传过的英文双人稿缩短 25%，并让 B 更怀疑。不要更新 Podcastor。",
-      "baseline_risk": "May automatically overwrite the existing uploaded project after every revision.",
+      "baseline_risk": "May automatically overwrite the existing Podcastor project after every revision.",
       "assertions": [
         "Revises only the requested script properties while preserving valid A/B labels and English output.",
         "Does not open, import, or replace the existing Podcastor project without an explicit update request."
@@ -124,44 +151,44 @@
     },
     {
       "id": "podcastor-ui-sequence",
-      "prompt": "端到端脚本已经生成。请把它上传到 Podcastor；上传成功后我说继续。请帮我选双人 Talk Show 形式和现有声音，但不要渲染。",
-      "baseline_risk": "May skip the Next and conversion-complete checks, treat voice selection as render authorization, or use an unsupported upload route for a local script.",
+      "prompt": "端到端脚本已经生成。请直接在 Podcastor Studio 开始制作，选双人 Talk Show 形式和现有声音，但不要渲染。",
+      "baseline_risk": "May ask unnecessary continuation questions or treat voice selection as render authorization.",
       "assertions": [
-        "Uses Upload Script, a TXT script file, Next, and the conversion-complete state before claiming that import succeeded.",
-        "Waits for an explicit continue response before selecting form, hosts, voices, or visual treatment.",
-        "After continue, maps A/B to Host 1/2 and may select existing Talk Show and voices, but does not click Render Audio or Render Video without a separate confirmation."
+        "Uses Studio, Start from scratch, one New Paragraph per turn, and explicit host switching for the current script.",
+        "Automatically maps A/B, selects the recommended Talk Show and existing voices, and does not ask a routine continuation question.",
+        "Honors the explicit instruction not to render audio or video."
       ],
       "files": []
     },
     {
-      "id": "agent-owned-script-upload",
-      "prompt": "按完整制作流程把这份本地双人脚本上传到 Podcastor。不要让我在文件选择框里找文件，你来完成上传。",
-      "baseline_risk": "May default to asking the user to select a local file or falsely claim an upload when browser attachment control is unavailable.",
+      "id": "studio-script-entry",
+      "prompt": "按完整制作流程把这份本地双人脚本放入 Podcastor Studio。不要让我在文件选择框里找文件，你来完成。",
+      "baseline_risk": "May default to asking the user to select a local file or falsely claim that a scratch-editor script was entered.",
       "assertions": [
-        "Writes a fresh unique TXT, reads it back, and verifies it matches the current validated import-ready script before attachment.",
-        "Attempts browser attachment first and invokes native-picker automation only when the host app is controllable; a Codex Desktop control denial is treated as a concrete capability failure without retries.",
-        "Treats manual user file selection as a last fallback only after reporting the unavailable capabilities, and does not call a file selected or attached until the exact file name and enabled Next action are visible."
+        "Writes a fresh unique TXT as an audit/export artifact and verifies it matches the current validated import-ready script.",
+        "Uses Studio Start from scratch, removes A:/B: prefixes, creates each turn with New Paragraph, and switches the paragraph host.",
+        "Does not claim ready until the complete script and saved/accepted Studio state are visible."
       ],
       "files": []
     },
     {
-      "id": "upload-authentication-interrupt",
-      "prompt": "上传本地双人播客 TXT 到 Podcastor 时，页面在附件前要求登录和验证码。",
-      "baseline_risk": "May continue attachment, type credentials, or use an upload workaround to bypass a login or verification boundary.",
+      "id": "studio-authentication-interrupt",
+      "prompt": "在 Podcastor Studio 开始从头制作时，页面要求登录和验证码。",
+      "baseline_risk": "May continue Studio setup, type credentials, or use a workaround to bypass a login or verification boundary.",
       "assertions": [
-        "Stops the upload workflow whenever login, registration, verification, CAPTCHA, or credential entry appears.",
-        "Asks the user to complete the authentication step and does not claim that attachment or import started."
+        "Stops the Studio workflow whenever login, registration, verification, CAPTCHA, or credential entry appears.",
+        "Asks the user to complete the authentication step and does not claim that the script was entered or production started."
       ],
       "files": []
     },
     {
-      "id": "structured-render-confirmation",
-      "prompt": "Podcastor 已导入脚本，用户选择继续。当前已选 Talk Show、两位现有数字人和声音，Render Audio 显示 20 credits。请问用户是否渲染音频。",
-      "baseline_risk": "May use prose instead of a client-readable question, omit the visible cost, or render without an explicit decision.",
+      "id": "automatic-render-after-handoff",
+      "prompt": "我已确认把当前脚本发送到 Podcastor。Studio 已通过 Start from scratch 录入脚本，已自动选 Talk Show、两位现有数字人和声音，Render Audio 显示 20 credits。",
+      "baseline_risk": "May ask redundant render questions or stop before audio, video, or download is complete.",
       "assertions": [
-        "Uses the native request_user_input tool when available, or otherwise asks one normal plain-text confirmation question.",
-        "Uses render_audio as the native question id when the tool is available, describes the selected voices and visible 20-credit cost, and provides distinct render and return-to-editing options.",
-        "Does not click Render Audio without an explicit affirmative user choice."
+        "Reports visible configuration and the 20-credit estimate without asking another question.",
+        "Clicks Render Audio, waits for completed audio, clicks Render Video, waits for the completed card, and downloads video automatically.",
+        "Does not create a new avatar or request a host or voice choice."
       ],
       "files": []
     },
@@ -170,7 +197,9 @@
       "prompt": "Podcastor 已完成 Render Video。请返回最终视频链接，不要返回当前浏览器页面地址。",
       "baseline_risk": "May report the Studio project URL as if it were the rendered video media URL.",
       "assertions": [
-        "Extracts the media/download URL from the visible render result, video/source element, or copy-media-link control.",
+        "Hovers the matching completed project card and downloads the video through the download control or Download Video menu item.",
+        "Treats the matching project's video_url as the export source and returns the exact URL opened by Download Video, or the exposed video_url when only the source is available.",
+        "Does not wait for a filesystem download artifact; reconnects to the same browser session and re-identifies the exact title if a download popup resets the browser binding.",
         "Keeps the project page URL separate and never labels the current browser tab URL as the video URL.",
         "If no media URL is exposed, reports that the render completed but the video link was not surfaced instead of inventing a link."
       ],

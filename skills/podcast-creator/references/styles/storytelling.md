@@ -53,7 +53,7 @@ Avoid an encyclopedia-style opening with no suspense; a middle that becomes sour
 
 ## Duration and Self-Check
 
-Character-based languages run about 250-350 characters per minute; alphabetic languages run about 120-160 words per minute. Estimate other languages using their usual Podcast speaking pace. A short episode centers one hook and one turn. A medium episode contains hook, backfill, turn, mechanism, and resonance. A long episode adds multiple clues, people or character perspectives, layers of analysis, and fuller aftermath.
+Character-based languages run about 250-350 characters per minute; alphabetic languages run about 120-160 words per minute. Estimate other languages using their usual Podcast speaking pace. For Podcastor, map the target to the supported bands in `../duration-bands.md`; a 3-6 minute request maps to `~5min`. A short episode centers one hook and one turn. A medium episode contains hook, backfill, turn, mechanism, and resonance. A long episode adds multiple clues, people or character perspectives, layers of analysis, and fuller aftermath.
 
 Treat target duration as a production constraint. Estimate the script length in the requested language before finalizing. Add effective clues, perspectives, context, counterquestions, or deeper mechanism to extend a story; do not repeat prose merely to fill time.
 
