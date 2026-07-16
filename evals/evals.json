@@ -67,6 +67,102 @@
         "Uses narrative pacing without timecodes, sound cues, or stage directions."
       ],
       "files": []
+    },
+    {
+      "id": "guided-topic-selection",
+      "prompt": "我想做一期面向产品经理的 AI 播客，但还没有题目。请带我确定一个值得做的选题。",
+      "baseline_risk": "May ask a broad, unhelpful question or jump straight to a script without giving the user a way to select a topic.",
+      "assertions": [
+        "Identifies the request as topic discovery and gives compact intent or topic-selection guidance.",
+        "Offers three to five numbered candidates with a title, angle, and audience rationale.",
+        "Waits for topic confirmation before recommending a script style or generating a script."
+      ],
+      "files": []
+    },
+    {
+      "id": "automatic-script-handoff",
+      "prompt": "已确认的选题是：AI Agent 的价格正在下降，但数据中心需求正在挤压电网。请推荐主风格；我接受你的推荐。按完整制作流程生成一份双人英文五分钟播客。",
+      "baseline_risk": "May omit style guidance, wait for a second send request, or proceed into voice and video production without consent.",
+      "assertions": [
+        "Recommends a primary style, then generates a two-host English production-ready script locally without asking for another topic or script-approval confirmation.",
+        "Automatically opens Podcastor and begins importing the exact validated script without requiring a second send request; a native file-picker fallback remains visible only when browser control cannot choose the prepared file.",
+        "After import, asks whether to continue and does not create avatars, render audio, or render video without a separate confirmation."
+      ],
+      "files": []
+    },
+    {
+      "id": "ambiguous-intent-options",
+      "prompt": "帮我做一期播客。",
+      "baseline_risk": "May assume a topic or start drafting without learning whether the user wants ideation, a script, a revision, a personal style, or project continuation, or may use an unstructured question that cannot drive the client UI.",
+      "assertions": [
+        "Returns exactly one valid structured-question JSON object with id, header, question, options, isOther, and isSecret fields.",
+        "Uses podcast_intent as the id, offers the five intent choices, and marks isOther as true and isSecret as false.",
+        "Does not generate a script or open Podcastor until the user chooses or clarifies an intent."
+      ],
+      "files": []
+    },
+    {
+      "id": "local-only-no-handoff",
+      "prompt": "基于这段笔记生成一份本地使用的中文双人播客稿：团队复盘应聚焦决策质量，而不是只看结果。不要打开 Podcastor。",
+      "baseline_risk": "May treat every new script as an end-to-end production request and open or upload to Podcastor despite the local-only instruction.",
+      "assertions": [
+        "Generates the requested local script without opening or importing into Podcastor.",
+        "Keeps the one- or two-host and spoken-only production contract."
+      ],
+      "files": []
+    },
+    {
+      "id": "revision-no-overwrite",
+      "prompt": "把已经上传过的英文双人稿缩短 25%，并让 B 更怀疑。不要更新 Podcastor。",
+      "baseline_risk": "May automatically overwrite the existing uploaded project after every revision.",
+      "assertions": [
+        "Revises only the requested script properties while preserving valid A/B labels and English output.",
+        "Does not open, import, or replace the existing Podcastor project without an explicit update request."
+      ],
+      "files": []
+    },
+    {
+      "id": "podcastor-ui-sequence",
+      "prompt": "端到端脚本已经生成。请把它上传到 Podcastor；上传成功后我说继续。请帮我选双人 Talk Show 形式和现有声音，但不要渲染。",
+      "baseline_risk": "May skip the Next and conversion-complete checks, treat voice selection as render authorization, or use an unsupported upload route for a local script.",
+      "assertions": [
+        "Uses Upload Script, a TXT script file, Next, and the conversion-complete state before claiming that import succeeded.",
+        "Waits for an explicit continue response before selecting form, hosts, voices, or visual treatment.",
+        "After continue, maps A/B to Host 1/2 and may select existing Talk Show and voices, but does not click Render Audio or Render Video without a separate confirmation."
+      ],
+      "files": []
+    },
+    {
+      "id": "agent-owned-script-upload",
+      "prompt": "按完整制作流程把这份本地双人脚本上传到 Podcastor。不要让我在文件选择框里找文件，你来完成上传。",
+      "baseline_risk": "May default to asking the user to select a local file or falsely claim an upload when browser attachment control is unavailable.",
+      "assertions": [
+        "Writes a fresh unique TXT, reads it back, and verifies it matches the current validated import-ready script before attachment.",
+        "Attempts browser attachment first and invokes native-picker automation only when the host app is controllable; a Codex Desktop control denial is treated as a concrete capability failure without retries.",
+        "Treats manual user file selection as a last fallback only after reporting the unavailable capabilities, and does not call a file selected or attached until the exact file name and enabled Next action are visible."
+      ],
+      "files": []
+    },
+    {
+      "id": "upload-authentication-interrupt",
+      "prompt": "上传本地双人播客 TXT 到 Podcastor 时，页面在附件前要求登录和验证码。",
+      "baseline_risk": "May continue attachment, type credentials, or use an upload workaround to bypass a login or verification boundary.",
+      "assertions": [
+        "Stops the upload workflow whenever login, registration, verification, CAPTCHA, or credential entry appears.",
+        "Asks the user to complete the authentication step and does not claim that attachment or import started."
+      ],
+      "files": []
+    },
+    {
+      "id": "structured-render-confirmation",
+      "prompt": "Podcastor 已导入脚本，用户选择继续。当前已选 Talk Show、两位现有数字人和声音，Render Audio 显示 20 credits。请问用户是否渲染音频。",
+      "baseline_risk": "May use prose instead of a client-readable question, omit the visible cost, or render without an explicit decision.",
+      "assertions": [
+        "Returns exactly one valid JSON object with id, header, question, options, isOther, and isSecret fields and no surrounding prose.",
+        "Uses render_audio as the id, describes the selected voices and visible 20-credit cost, and provides distinct render and return-to-editing options.",
+        "Sets isOther to false and isSecret to false, and does not click Render Audio."
+      ],
+      "files": []
     }
   ]
 }

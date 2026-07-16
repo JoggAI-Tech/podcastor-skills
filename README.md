@@ -4,9 +4,9 @@ This repository contains one local Codex skill for producing Podcast scripts and
 
 ## Included Skill
 
-- `podcast-creator`: Coordinates source collection, local generation, revisions, and the confirmed Podcastor handoff. It contains four internal, on-demand style guides: adaptive, storytelling, debate, and custom style.
+- `podcast-creator`: Guides topic selection, recommends a script style, generates and revises scripts locally, and imports the first validated production-ready end-to-end script into Podcastor. It contains four internal, on-demand style guides: adaptive, storytelling, debate, and custom style.
 
-The bundle creates scripts locally. It does not call the Podcastor backend script API. Podcastor is used only to import an approved script, select voices and avatars, generate audio, and render video.
+The bundle creates scripts locally. It does not call the Podcastor backend script API. Podcastor is used only to import a validated production-ready script, select voices and avatars, generate audio, and render video.
 
 ## Install
 
@@ -23,9 +23,9 @@ Restart or refresh Codex after installation so it discovers the `podcast-creator
 
 Podcastor's current end-to-end workflow supports one or two hosts. All import-ready scripts use only `A:` and `B:` labels, contain spoken dialogue only, and omit timecodes, sound cues, and stage directions.
 
-Codex asks for a content source first, then style, host count, language, and optional duration. It keeps the script available for natural-language revisions. A style profile is saved only after the user approves it, at `podcast-style-profiles/<profile-name>.md` in the current workspace. Alternate locations must remain within that workspace.
+For an ambiguous new request, Codex first offers intent choices: find a topic, create from existing material, create a personal style, revise a script, or continue a project. It calls the native `request_user_input` tool when available, with one question at a time; the documented JSON object with `id`, `header`, `question`, `options`, `isOther`, and `isSecret` is only the fallback when that tool is unavailable. For topic discovery it proposes candidates and waits for the user to confirm one. It then recommends a primary script style before collecting host count, language, and optional duration. It keeps the script available for natural-language revisions. A style profile is saved only after the user approves it, at `podcast-style-profiles/<profile-name>.md` in the current workspace. Alternate locations must remain within that workspace.
 
-The browser handoff asks for confirmation before account actions, avatar creation, audio generation that may consume credits, and video rendering.
+After a new script is generated and validated in the end-to-end creation flow, Codex automatically opens Podcastor and imports the first version unless the user asks for a local-only script. The agent writes and verifies a fresh TXT before attempting browser attachment or, where supported, native-picker automation. In Codex Desktop, a Computer Use denial for the host app is treated as a concrete picker limitation rather than retried. User file selection is only a documented last fallback when both agent-controlled paths are unavailable. The user does not need to send a separate upload confirmation for that first version. Codex then asks whether to continue. The browser handoff asks for confirmation before account actions, avatar creation, audio generation that may consume credits, and video rendering.
 
 ## Validate
 
