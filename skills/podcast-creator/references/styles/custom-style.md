@@ -2,9 +2,11 @@
 
 Turn a user-provided reference script into an editable, transferable **abstract style**, not an imitation of a real host, channel, or IP. Preserve rhythm, structure, interaction pattern, and information release while making the new episode's facts, wording, and character relationship fully original.
 
+Recommend this route explicitly during style selection whenever the user provides another script or asks to copy, clone, replicate, or learn from another script's style. Describe it as abstract style transfer: the user may reuse structural preferences, but the new script must not reproduce distinctive language, identity, or branded expression.
+
 ## Workflow
 
-1. Determine whether the request is a new script, personal-style definition, style refinement, reuse of a saved profile, or diagnosis of an existing prompt.
+1. Determine whether the request is a new script, reference-style replication, personal-style definition, style refinement, reuse of a saved profile, or diagnosis of an existing prompt.
 2. For style definition, analyze the reference and show an editable profile before writing. Do not mix the analysis into the finished script.
 3. Collect the new episode's content source, then the missing language, host count, duration, audience, and depth.
 4. Transfer the abstract style before generating content. A reference is only a style source unless the user explicitly makes it a factual source for the new episode.

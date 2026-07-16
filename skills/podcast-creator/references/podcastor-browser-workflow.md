@@ -2,7 +2,7 @@
 
 Use this workflow after a new one- or two-host script is generated and validated in the guided end-to-end creation flow. The workflow-level request authorizes script import for its first production-ready script; it does not authorize account actions or credit-consuming production actions. Do not use it for a local-only request or a draft still under revision.
 
-Use the native `request_user_input` tool described in `SKILL.md` for every user-facing choice or confirmation in this workflow. Ask one question at a time, use the named ID below, and supply current visible options rather than inventing options that are not on the page. Use the documented JSON fallback only when the native tool is unavailable.
+Use the native `request_user_input` tool described in `SKILL.md` for every user-facing choice or confirmation in this workflow. Clarify only blockers first, then batch up to three independent choices into one call and infer safe defaults for anything already clear. Keep the continue gate, authentication, avatar creation, audio render, and video render as separate confirmations. If the native tool fails, use the normal plain-text option format from `SKILL.md`.
 
 ## Prepare The Exact File
 
@@ -33,6 +33,6 @@ The UI can also convert MP3, WAV, or M4A audio to a script. That is a separate a
 ## Render Boundaries
 
 13. Before `Render Audio` in the bottom action bar, show the selected voices and visible credit estimate. Use a `render_audio` native confirmation before clicking it. Wait for the page to report success or failure.
-14. Before `Render Video` in the Studio header, show the selected form, camera treatment, hosts, aspect ratio, and visible credit estimate. Use a `render_video` native confirmation before clicking it. After a confirmed production action, wait for the result state and report the resulting project or media link when available; otherwise report the surfaced error and keep the current script available for correction.
+14. Before `Render Video` in the Studio header, show the selected form, camera treatment, hosts, aspect ratio, and visible credit estimate. Use a `render_video` native confirmation before clicking it. After a confirmed production action, wait for the completed result state. Extract the actual video URL from the visible result card, download/open link, video or source element, or an explicit copy-media-link control. Return that media URL when available. Never use the current browser tab URL or Studio project URL as the video URL; those URLs identify the project page only. If rendering completes but no media URL is exposed, report completion with the project URL separately and state that the video link was not surfaced. Otherwise report the surfaced error and keep the current script available for correction.
 
 Never bypass authentication, CAPTCHA, payment, usage limits, or warning dialogs. Do not use a product API as a substitute for this browser flow.

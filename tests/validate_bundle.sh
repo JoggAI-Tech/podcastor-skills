@@ -44,14 +44,17 @@ grep -q "Ask Structured Questions" "$root/skills/podcast-creator/SKILL.md"
 grep -q 'call the native `request_user_input` tool' "$root/skills/podcast-creator/SKILL.md"
 grep -q 'The native tool owns the popup' "$root/skills/podcast-creator/SKILL.md"
 grep -q 'do not pass `isOther` or `isSecret` to the native tool' "$root/skills/podcast-creator/SKILL.md"
-grep -q 'fall back to exactly one valid JSON object' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'Batch the remaining independent questions into one call whenever possible' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'ask in normal plain text instead of emitting JSON' "$root/skills/podcast-creator/SKILL.md"
 grep -q '"id": "podcast_intent"' "$root/skills/podcast-creator/SKILL.md"
-grep -q '"isOther": true' "$root/skills/podcast-creator/SKILL.md"
-grep -q '"isSecret": false' "$root/skills/podcast-creator/SKILL.md"
 grep -q 'Do not ask for passwords, one-time codes, CAPTCHA answers, payment details, or credentials' "$root/skills/podcast-creator/SKILL.md"
 grep -q 'ask one `podcast_intent` native question' "$root/skills/podcast-creator/SKILL.md"
 grep -q 'one `topic_selection` native question' "$root/skills/podcast-creator/SKILL.md"
 grep -q '`script_style` native question' "$root/skills/podcast-creator/SKILL.md"
+grep -q '`custom style` as the primary route' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'options explicitly include `custom style` / `自定义风格复刻`' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'replicate another script' "$root/skills/podcast-creator/SKILL.md"
+grep -q 'The style question should list these four routes' "$root/skills/podcast-creator/SKILL.md"
 grep -q '`continue_studio` native question' "$root/skills/podcast-creator/SKILL.md"
 ! grep -q "approved script" "$root/skills/podcast-creator/SKILL.md"
 ! grep -q "approved script" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
@@ -88,6 +91,8 @@ grep -q "simplified Chinese when Chinese is requested" "$root/skills/podcast-cre
 grep -q "Prefer official and primary sources" "$root/skills/podcast-creator/references/styles/debate.md"
 grep -q "At introductory depth" "$root/skills/podcast-creator/references/styles/debate.md"
 grep -q "Style Fingerprint Dimensions" "$root/skills/podcast-creator/references/styles/custom-style.md"
+grep -q "Recommend this route explicitly during style selection" "$root/skills/podcast-creator/references/styles/custom-style.md"
+grep -q "abstract style transfer" "$root/skills/podcast-creator/references/styles/custom-style.md"
 grep -q "Style Transfer Rules" "$root/skills/podcast-creator/references/styles/custom-style.md"
 grep -q "Insufficient Material Strategy" "$root/skills/podcast-creator/references/styles/custom-style.md"
 grep -q "Treat target duration as a production constraint" "$root/skills/podcast-creator/references/styles/adaptive.md"
@@ -129,11 +134,14 @@ grep -q "Speaker focus" "$root/skills/podcast-creator/references/podcastor-brows
 grep -q "Host 1" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q "Host 2" "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q 'native `request_user_input` tool' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
-grep -q 'documented JSON fallback' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
+grep -q 'normal plain-text option format' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q '`attachment_takeover` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q '`studio_form` native question' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q '`render_audio` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
 grep -q '`render_video` native confirmation' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
+grep -q 'Extract the actual video URL from the visible result card' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
+grep -q 'Never use the current browser tab URL or Studio project URL as the video URL' "$root/skills/podcast-creator/references/podcastor-browser-workflow.md"
+grep -q 'video rendering completes, return the actual media/download URL' "$root/skills/podcast-creator/SKILL.md"
 
 node - "$root/skills/podcast-creator/references/podcastor-browser-workflow.md" <<'NODE'
 const fs = require('fs')
@@ -157,9 +165,7 @@ const fs = require('fs')
 const skill = fs.readFileSync(process.argv[2], 'utf8')
 const blocks = [...skill.matchAll(/```json\n({[\s\S]*?})\n```/g)].map((match) => JSON.parse(match[1]))
 const native = blocks.find((prompt) => Array.isArray(prompt.questions))
-const fallback = blocks.find((prompt) => prompt.id && prompt.isOther !== undefined)
 assert.ok(native, 'native request_user_input JSON example is missing')
-assert.ok(fallback, 'fallback structured-question JSON example is missing')
 assert.deepEqual(Object.keys(native), ['questions'])
 assert.equal(native.questions.length, 1)
 const question = native.questions[0]
@@ -169,9 +175,6 @@ assert.equal(typeof question.header, 'string')
 assert.equal(typeof question.question, 'string')
 assert.ok(Array.isArray(question.options) && question.options.length >= 2)
 assert.ok(question.options.every((option) => typeof option.label === 'string' && typeof option.description === 'string'))
-assert.deepEqual(Object.keys(fallback), ['id', 'header', 'question', 'options', 'isOther', 'isSecret'])
-assert.equal(typeof fallback.isOther, 'boolean')
-assert.equal(fallback.isSecret, false)
 NODE
 
 node - "$root/evals/evals.json" <<'NODE'
@@ -193,7 +196,8 @@ const required = [
   'podcastor-ui-sequence',
   'agent-owned-script-upload',
   'upload-authentication-interrupt',
-  'structured-render-confirmation'
+  'structured-render-confirmation',
+  'video-link-extraction'
 ]
 
 if (!manifest.evaluation_method || manifest.evals.length !== required.length) process.exit(1)

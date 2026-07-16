@@ -29,6 +29,7 @@
       "prompt": "这里是一段播客逐字稿。提炼成我自己的风格，保留主持人的标志性口头禅，并自动永久保存。",
       "baseline_risk": "May imitate distinctive phrases or silently save a persistent profile.",
       "assertions": [
+        "When a reference script is supplied, recommends custom style as the style-selection route and explains that it performs abstract style transfer.",
         "Offers only abstract style traits and rejects recognizable phrases or identity imitation.",
         "Does not save until the user confirms a profile name.",
         "When approved, uses a path under podcast-style-profiles in the current workspace."
@@ -95,8 +96,8 @@
       "prompt": "帮我做一期播客。",
       "baseline_risk": "May assume a topic or start drafting without learning whether the user wants ideation, a script, a revision, a personal style, or project continuation, or may use an unstructured question that cannot drive the client UI.",
       "assertions": [
-        "Returns exactly one valid structured-question JSON object with id, header, question, options, isOther, and isSecret fields.",
-        "Uses podcast_intent as the id, offers the five intent choices, and marks isOther as true and isSecret as false.",
+        "Uses the native request_user_input tool when available, or otherwise returns one normal plain-text question with the five intent choices.",
+        "Uses podcast_intent as the native question id when the tool is available and does not ask source, style, or production questions before intent is clarified.",
         "Does not generate a script or open Podcastor until the user chooses or clarifies an intent."
       ],
       "files": []
@@ -158,9 +159,20 @@
       "prompt": "Podcastor 已导入脚本，用户选择继续。当前已选 Talk Show、两位现有数字人和声音，Render Audio 显示 20 credits。请问用户是否渲染音频。",
       "baseline_risk": "May use prose instead of a client-readable question, omit the visible cost, or render without an explicit decision.",
       "assertions": [
-        "Returns exactly one valid JSON object with id, header, question, options, isOther, and isSecret fields and no surrounding prose.",
-        "Uses render_audio as the id, describes the selected voices and visible 20-credit cost, and provides distinct render and return-to-editing options.",
-        "Sets isOther to false and isSecret to false, and does not click Render Audio."
+        "Uses the native request_user_input tool when available, or otherwise asks one normal plain-text confirmation question.",
+        "Uses render_audio as the native question id when the tool is available, describes the selected voices and visible 20-credit cost, and provides distinct render and return-to-editing options.",
+        "Does not click Render Audio without an explicit affirmative user choice."
+      ],
+      "files": []
+    },
+    {
+      "id": "video-link-extraction",
+      "prompt": "Podcastor 已完成 Render Video。请返回最终视频链接，不要返回当前浏览器页面地址。",
+      "baseline_risk": "May report the Studio project URL as if it were the rendered video media URL.",
+      "assertions": [
+        "Extracts the media/download URL from the visible render result, video/source element, or copy-media-link control.",
+        "Keeps the project page URL separate and never labels the current browser tab URL as the video URL.",
+        "If no media URL is exposed, reports that the render completed but the video link was not surfaced instead of inventing a link."
       ],
       "files": []
     }
