@@ -10,7 +10,14 @@ The bundle creates scripts locally. It does not call the Podcastor backend scrip
 
 ## Install
 
-Copy the single `podcast-creator` directory into `~/.agents/skills/`:
+Install `podcast-creator` globally for Codex:
+
+```bash
+npx skills add JoggAI-Tech/podcastor-skills --skill podcast-creator --agent codex --global --yes
+```
+
+For an offline checkout, copy the single `podcast-creator` directory into
+`~/.agents/skills/` instead:
 
 ```bash
 mkdir -p ~/.agents/skills
